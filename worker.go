@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stripe/veneur/ssf"
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/Sirupsen/logrus"
 	"github.com/stripe/veneur/samplers"
+	"github.com/stripe/veneur/ssf"
 )
 
 // Worker is the doodad that does work.
@@ -324,19 +324,19 @@ func (ew *EventWorker) Flush() ([]samplers.UDPEvent, []samplers.UDPServiceCheck)
 
 // TraceWorker is similar to a Worker but it collects events and service checks instead of metrics.
 type TraceWorker struct {
-	TraceChan        chan ssf.SSFSample
-	mutex            *sync.Mutex
-	traces           *ring.Ring
-	stats            *statsd.Client
+	TraceChan chan ssf.SSFSample
+	mutex     *sync.Mutex
+	traces    *ring.Ring
+	stats     *statsd.Client
 }
 
 // NewTraceWorker creates an TraceWorker ready to collect events and service checks.
 func NewTraceWorker(stats *statsd.Client) *TraceWorker {
 	return &TraceWorker{
-		TraceChan:        make(chan ssf.SSFSample),
-		mutex:            &sync.Mutex{},
-		traces: 					ring.New(12), // TODO MAKE THIS CONFIGURABLE
-		stats:            stats,
+		TraceChan: make(chan ssf.SSFSample),
+		mutex:     &sync.Mutex{},
+		traces:    ring.New(12), // TODO MAKE THIS CONFIGURABLE
+		stats:     stats,
 	}
 }
 
@@ -354,7 +354,7 @@ func (tw *TraceWorker) Work() {
 
 // Flush returns the TraceWorker's stored spans and
 // resets the stored contents.
-func (tw *TraceWorker) Flush() (*ring.Ring) {
+func (tw *TraceWorker) Flush() *ring.Ring {
 	start := time.Now()
 	tw.mutex.Lock()
 
