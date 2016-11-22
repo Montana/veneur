@@ -23,14 +23,10 @@ RUN go generate
 RUN gofmt -w .
 
 # Run twice so we get the output, but also non-zero exit status
-# if there are staged changes
-RUN git diff-index --cached HEAD && \
-  git diff-index --quiet --cached HEAD
-
-# Run twice so we get the output, but also non-zero exit status
-# if there are unstaged changes
-RUN git diff-files --cached HEAD && \
-  git diff-files --quiet --cached HEAD
+# if there are unstaged changes OR staged changes that have been
+# undone in the working tree but *not* staged
+RUN git diff-index HEAD && \
+  git diff-index --quiet HEAD 
 
 RUN test -n $(git status --porcelain)
 RUN govendor test -v -timeout 10s +local
