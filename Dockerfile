@@ -19,7 +19,7 @@ ADD . /go/src/github.com/stripe/veneur
 
 # This allows us to test Dockerfile changes without committing every single time
 # to avoid a dirty tree
-RUN git checkout Dockerfile
+#RUN git checkout Dockerfile
 RUN cp -r henson /build/
 RUN go generate
 RUN gofmt -w .
@@ -27,9 +27,8 @@ RUN gofmt -w .
 # Run twice so we get the output, but also non-zero exit status
 # if there are unstaged changes OR staged changes that have been
 # undone in the working tree but *not* staged
-RUN git diff-index HEAD && \
-  git diff-index --quiet HEAD 
+RUN git diff-index HEAD
+RUN git diff-index --quiet HEAD 
 
-RUN test -n $(git status --porcelain)
 RUN govendor test -v -timeout 10s +local
 RUN go build -a -v -ldflags "-X github.com/stripe/veneur.VERSION=$(git rev-parse HEAD)" -o /build/veneur ./cmd/veneur
