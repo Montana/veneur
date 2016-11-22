@@ -17,12 +17,18 @@ WORKDIR /go/src/github.com/stripe/veneur
 ADD . /go/src/github.com/stripe/veneur
 
 
+# If running locally, ignore any changes since
+# the last commit
 RUN git reset --hard HEAD && git status
 RUN cp -r henson /build/
 RUN go generate
 RUN gofmt -w .
-RUN git add .
 
+# Stage any changes caused by go generate and gofmt,
+# then confirm that there are no staged changes.
+# TODO figure out why this test is flaky if we don't stage
+# and run without --cached.
+RUN git add .
 RUN git diff-index --cached --exit-code HEAD
 
 RUN govendor test -v -timeout 10s +local
