@@ -15,7 +15,9 @@ RUN chmod 777 /usr/bin/protoc
 
 WORKDIR /go/src/github.com/stripe/veneur
 ADD . /go/src/github.com/stripe/veneur
-# This allows us to test without committing every single time
+
+
+# This allows us to test Dockerfile changes without committing every single time
 # to avoid a dirty tree
 RUN git checkout Dockerfile
 RUN cp -r henson /build/
