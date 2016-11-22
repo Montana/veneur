@@ -17,7 +17,8 @@ before_script:
   # If `go generate` or `gofmt` yielded any changes,
   # this will fail with an error message like "too many arguments"
   # or "M: binary operator expected"
-  - test -n $(git status --porcelain)
+  - git add .
+  - git diff-index --cached --exit-code HEAD
 
 
 script:
