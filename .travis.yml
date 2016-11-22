@@ -5,8 +5,8 @@ go:
 
 install:
   - wget https://github.com/google/protobuf/releases/download/v3.1.0/protoc-3.1.0-linux-x86_64.zip
-  - unzip protoc-3.1.0-linux-x86_64.zip
-  - sudo cp bin/protoc /usr/bin/protoc
+  - unzip protoc-3.1.0-linux-x86_64.zip -d /tmp
+  - sudo cp /tmp/bin/protoc /usr/bin/protoc
   - sudo chmod 777 /usr/bin/protoc
 
 before_script:
