@@ -8,6 +8,7 @@ install:
   - unzip protoc-3.1.0-linux-x86_64.zip -d /tmp
   - sudo cp /tmp/bin/protoc /usr/bin/protoc
   - sudo chmod 777 /usr/bin/protoc
+  - rm protoc-3.1.0-linux-x86_64.zip
 
 before_script:
   - go get -u github.com/ChimeraCoder/gojson/gojson
